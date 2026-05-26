@@ -1,0 +1,124 @@
+import { useState } from 'react'
+import toast from 'react-hot-toast'
+
+export default function Login({ signIn }) {
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [loading, setLoading] = useState(false)
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    if (!email || !password) return
+    setLoading(true)
+    const { error } = await signIn(email, password)
+    if (error) {
+      toast.error(error.message || 'Login failed')
+    }
+    setLoading(false)
+  }
+
+  return (
+    <div
+      style={{
+        minHeight: '100vh',
+        backgroundColor: 'var(--bg-primary)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '24px',
+      }}
+    >
+      <div
+        className="card fade-in"
+        style={{ width: '100%', maxWidth: '400px', padding: '40px' }}
+      >
+        <div style={{ textAlign: 'center', marginBottom: '32px' }}>
+          <div style={{ fontSize: '2.5rem', marginBottom: '12px' }}>⚡</div>
+          <h1
+            style={{
+              fontSize: '1.5rem',
+              fontWeight: '700',
+              color: 'var(--text-primary)',
+              marginBottom: '8px',
+            }}
+          >
+            Command Centre
+          </h1>
+          <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem' }}>
+            Your day, your way. Let's get to work.
+          </p>
+        </div>
+
+        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          <div>
+            <label
+              style={{
+                display: 'block',
+                fontSize: '0.8rem',
+                fontWeight: '500',
+                color: 'var(--text-secondary)',
+                marginBottom: '6px',
+                letterSpacing: '0.05em',
+                textTransform: 'uppercase',
+              }}
+            >
+              Email
+            </label>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="you@example.com"
+              autoComplete="email"
+              required
+            />
+          </div>
+
+          <div>
+            <label
+              style={{
+                display: 'block',
+                fontSize: '0.8rem',
+                fontWeight: '500',
+                color: 'var(--text-secondary)',
+                marginBottom: '6px',
+                letterSpacing: '0.05em',
+                textTransform: 'uppercase',
+              }}
+            >
+              Password
+            </label>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="••••••••"
+              autoComplete="current-password"
+              required
+            />
+          </div>
+
+          <button
+            type="submit"
+            className="btn-primary"
+            disabled={loading}
+            style={{ marginTop: '8px', padding: '12px', fontSize: '1rem', width: '100%' }}
+          >
+            {loading ? 'Signing in…' : 'Sign In →'}
+          </button>
+        </form>
+
+        <p
+          style={{
+            textAlign: 'center',
+            marginTop: '24px',
+            fontSize: '0.75rem',
+            color: 'var(--text-muted)',
+          }}
+        >
+          Manage your account in Supabase dashboard
+        </p>
+      </div>
+    </div>
+  )
+}

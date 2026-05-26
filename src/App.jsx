@@ -12,12 +12,14 @@ import Markets from './components/Markets'
 import StudyProgress from './components/StudyProgress'
 import ReadingList from './components/ReadingList'
 import TelegramNotes from './components/TelegramNotes'
+import Weather from './components/Weather'
+import Quote from './components/Quote'
+import QuickLinks from './components/QuickLinks'
+import PomodoroTimer from './components/PomodoroTimer'
 
 export default function App() {
   const { user, loading, signIn, signOut } = useAuth()
-  const [theme, setTheme] = useState(() => {
-    return localStorage.getItem('theme') || 'dark'
-  })
+  const [theme, setTheme] = useState(() => localStorage.getItem('theme') || 'dark')
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme)
@@ -48,16 +50,16 @@ export default function App() {
       <div style={{ minHeight: '100vh', backgroundColor: 'var(--bg-primary)' }}>
         <Header signOut={signOut} theme={theme} toggleTheme={toggleTheme} />
 
-        <main style={{ padding: '24px', maxWidth: '1400px', margin: '0 auto' }}>
-          {/* Row 1: Todo + Habit/Calendar */}
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
-              gap: '20px',
-              marginBottom: '20px',
-            }}
-          >
+        <main style={{ padding: '24px', maxWidth: '1440px', margin: '0 auto' }}>
+
+          {/* Row 1: Weather + Quote */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '20px', marginBottom: '20px' }}>
+            <Weather />
+            <Quote />
+          </div>
+
+          {/* Row 2: Todo (wide) + Habit + Calendar */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0,1.4fr) minmax(0,1fr)', gap: '20px', marginBottom: '20px' }}>
             <TodoList user={user} />
             <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
               <HabitTracker user={user} />
@@ -65,36 +67,30 @@ export default function App() {
             </div>
           </div>
 
-          {/* Row 2: Journal full width */}
-          <div style={{ marginBottom: '20px' }}>
+          {/* Row 3: Journal + Pomodoro + Quick Links */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0,2fr) minmax(0,1fr) minmax(0,1fr)', gap: '20px', marginBottom: '20px' }}>
             <Journal user={user} />
+            <PomodoroTimer />
+            <QuickLinks />
           </div>
 
-          {/* Row 3: Goals + Study + Markets */}
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-              gap: '20px',
-              marginBottom: '20px',
-            }}
-          >
-            <Goals user={user} />
-            <StudyProgress />
+          {/* Row 4: Markets — featured full width */}
+          <div style={{ marginBottom: '20px' }}>
             <Markets />
           </div>
 
-          {/* Row 4: Reading + Telegram */}
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-              gap: '20px',
-            }}
-          >
+          {/* Row 5: Goals + Study + Reading */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '20px', marginBottom: '20px' }}>
+            <Goals user={user} />
+            <StudyProgress />
             <ReadingList user={user} />
+          </div>
+
+          {/* Row 6: Telegram notes */}
+          <div>
             <TelegramNotes user={user} />
           </div>
+
         </main>
       </div>
 
@@ -106,6 +102,8 @@ export default function App() {
             color: 'var(--text-primary)',
             border: '1px solid var(--border-color)',
             fontFamily: 'DM Sans, sans-serif',
+            borderRadius: '10px',
+            boxShadow: 'var(--shadow)',
           },
         }}
       />
